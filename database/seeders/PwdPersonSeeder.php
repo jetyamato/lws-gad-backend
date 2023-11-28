@@ -4,15 +4,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\PwdReport;
+use App\Models\PwdPerson;
 
-class PwdReportSeeder extends Seeder
+class PwdPersonSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        PwdReport::factory(3)->create();
+        PwdPerson::factory(3)->create();
     }
 }

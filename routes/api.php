@@ -17,3 +17,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/pwd', [PwdController::class, 'index']);
+
+Route::post('/pwd', [PwdController::class, 'store']);
+
+Route::get('/pwd/{pwd}', [PwdController::class, 'show']);
+
+Route::put('/pwd/{pwd}', [PwdController::class, 'update']);
+
+Route::delete('/pwd/{pwd}', [PwdController::class, 'destroy']);

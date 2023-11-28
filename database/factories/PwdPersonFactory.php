@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PwdReport>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PwdPerson>
  */
-class PwdReportFactory extends Factory
+class PwdPersonFactory extends Factory
 {
     /**
      * Define the model's default state.

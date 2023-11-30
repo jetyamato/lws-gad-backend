@@ -7,19 +7,52 @@ use App\Models\PwdPerson;
 
 class PwdController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
         $persons = PwdPerson::all();
-        return response()->json($persons);
+        
+        if ($request->wantsJson()) {
+            return response()->json($persons);
+        }
+        else {
+            return view('pwd.index', [
+                'persons' => PwdPerson::all()
+            ]);
+        }
     }
 
-    public function show(PwdPerson $person) {
-        return response()->json($person);
+    public function show(Request $request, PwdPerson $person) {
+        if ($request->wantsJson()) {
+            return response()->json($person);
+        }
+        else {
+            return view('pwd.show', [
+                'person' => $person,
+                'family_members' => $person->familyMembers
+            ]);
+        }
     }
 
-    public function destroy(PwdPerson $person) {
+    public function destroy(Request $request, PwdPerson $person) {
+        $person->familyMembers()->delete();
         $person->delete();
 
-        return response()->json("PWD person record deleted.", 201);
+        if ($request->wantsJson()) {
+            return response()->json("PWD person record deleted.", 200);
+        }
+        else {
+            return view('pwd.success', ['info' => 'PWD person record deleted.']);
+        }
+    }
+
+    public function create() {
+        return view('pwd.create');
+    }
+
+    public function edit(PwdPerson $person) {
+        return view('pwd.edit', [
+            'person' => $person,
+            'family_member' => $person->familyMembers()->first()
+        ]);
     }
 
     public function store(Request $request) {
@@ -93,7 +126,7 @@ class PwdController extends Controller
             'occupation' => 'required'
         ]);
 
-        $pwd_person = PwdPerson::create([
+        $person = PwdPerson::create([
             'registration_number' => $request->registration_number,
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
@@ -127,14 +160,19 @@ class PwdController extends Controller
             'organization_telephone_number' => $request->organization_telephone_number
         ]);
 
-        $pwd_person->familyMembers()->create([
+        $person->familyMembers()->create([
             'name' => $request->name,
             'relation_to_pwd_person' => $request->relation_to_pwd_person,
             'age' => $request->age,
             'occupation' => $request->occupation
         ]);
 
-        return response()->json("PWD person record added.", 201);
+        if ($request->wantsJson()) {
+            return response()->json("PWD person record added.", 201);
+        }
+        else {
+            return view('pwd.success', ['info' => 'PWD person record added.']);
+        }
     }
 
     public function update(Request $request, PwdPerson $person) {
@@ -208,7 +246,7 @@ class PwdController extends Controller
             'occupation' => 'required'
         ]);
 
-        $report->update([
+        $person->update([
             'registration_number' => $request->registration_number,
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
@@ -242,13 +280,18 @@ class PwdController extends Controller
             'organization_telephone_number' => $request->organization_telephone_number
         ]);
 
-        $report->familyMembers()->update([
+        $person->familyMembers()->update([
             'name' => $request->name,
             'relation_to_pwd_person' => $request->relation_to_pwd_person,
             'age' => $request->age,
             'occupation' => $request->occupation
         ]);
 
-        return response()->json("PWD person record updated.", 201);
+        if ($request->wantsJson()) {
+            return response()->json("PWD person record updated.", 200);
+        }
+        else {
+            return view('pwd.success', ['info' => 'PWD person record updated.']);
+        }
     }
 }
